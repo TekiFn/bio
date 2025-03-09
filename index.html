@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tekki</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ff0000' d='M20.5 4.5c-3.8 2.3-6.3 3.3-9.5 3.3c-3.2 0-5.7-1-9.5-3.3L0 6.8c4 2.4 7.2 3.5 11 3.5c3.8 0 7-1.1 11-3.5L20.5 4.5zm0 5c-3.8 2.3-6.3 3.3-9.5 3.3c-3.2 0-5.7-1-9.5-3.3L0 11.8c4 2.4 7.2 3.5 11 3.5c3.8 0 7-1.1 11-3.5L20.5 9.5zm0 5c-3.8 2.3-6.3 3.3-9.5 3.3c-3.2 0-5.7-1-9.5-3.3L0 16.8c4 2.4 7.2 3.5 11 3.5c3.8 0 7-1.1 11-3.5L20.5 14.5z'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
@@ -400,7 +401,9 @@
 
         #steam-profile.active .social-link,
         #mal-profile.active .social-link,
-        #spotify-profile.active .social-link {
+        #spotify-profile.active .social-link,
+        #katujemy-profile.active .social-link,
+        #instagram-profile.active .social-link {
             opacity: 1;
             background: rgba(255, 255, 255, 0.1);
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
@@ -410,17 +413,20 @@
         @keyframes pulseGlow {
             0% {
                 box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+                background: rgba(255, 255, 255, 0.1);
             }
             50% {
                 box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+                background: rgba(255, 255, 255, 0.15);
             }
             100% {
                 box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+                background: rgba(255, 255, 255, 0.1);
             }
         }
 
         .social-link:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
             opacity: 1;
         }
@@ -446,7 +452,7 @@
             perspective: 1000px;
             margin-top: 1rem;
             width: 100%;
-            overflow: hidden;
+            overflow: visible;
         }
 
         .profile-container > div {
@@ -455,25 +461,33 @@
             position: absolute;
             opacity: 0;
             pointer-events: none;
-            transform: translateX(180px) scale(0.9);
+            transform: translateX(200px) scale(0.85);
+            visibility: hidden;
         }
 
         .profile-container > div.prev {
-            transform: translateX(-180px) scale(0.9);
+            transform: translateX(-200px) scale(0.85);
             opacity: 0.6;
+            filter: blur(1px);
             pointer-events: auto;
+            visibility: visible;
         }
 
         .profile-container > div.active {
             transform: translateX(0) translateZ(20px);
             opacity: 1;
+            filter: blur(0);
+            z-index: 1;
             pointer-events: auto;
+            visibility: visible;
         }
 
         .profile-container > div.next {
-            transform: translateX(180px) scale(0.9);
+            transform: translateX(200px) scale(0.85);
             opacity: 0.6;
+            filter: blur(1px);
             pointer-events: auto;
+            visibility: visible;
         }
 
         @keyframes slideIn {
@@ -590,7 +604,7 @@
                 const element = document.getElementById(profileId);
                 container.appendChild(element);
             });
-            showProfile(1); // Always highlight center item
+            showProfile(2); // Update to show the center item (index 2)
         }
 
         async function updateProfile() {
