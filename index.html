@@ -218,16 +218,22 @@
             transform: translateY(0);
         }
 
-        .activity:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.4);
+        .activity.gaming {
+            border-color: rgba(88, 101, 242, 0.7);
+            background: linear-gradient(45deg, rgba(88, 101, 242, 0.15), rgba(88, 101, 242, 0.25));
+            box-shadow: 0 0 30px rgba(88, 101, 242, 0.2);
         }
 
-        .activity.gaming {
-            border-color: rgba(114, 137, 218, 0.7);
-            background: linear-gradient(45deg, rgba(114, 137, 218, 0.15), rgba(114, 137, 218, 0.25));
-            box-shadow: 0 0 30px rgba(114, 137, 218, 0.2);
+        .activity.twitch {
+            border-color: rgba(145, 70, 255, 0.7);
+            background: linear-gradient(45deg, rgba(145, 70, 255, 0.15), rgba(145, 70, 255, 0.25));
+            box-shadow: 0 0 30px rgba(145, 70, 255, 0.2);
+        }
+
+        .activity.youtube {
+            border-color: rgba(255, 0, 0, 0.7);
+            background: linear-gradient(45deg, rgba(255, 0, 0, 0.15), rgba(255, 0, 0, 0.25));
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.2);
         }
 
         .activity.spotify {
@@ -237,9 +243,84 @@
         }
 
         .activity.streaming {
-            border-color: rgba(89, 54, 149, 0.7);
-            background: linear-gradient(45deg, rgba(89, 54, 149, 0.15), rgba(89, 54, 149, 0.25));
-            box-shadow: 0 0 30px rgba(89, 54, 149, 0.2);
+            border-color: rgba(145, 70, 255, 0.7);
+            background: linear-gradient(45deg, rgba(145, 70, 255, 0.15), rgba(145, 70, 255, 0.25));
+            box-shadow: 0 0 30px rgba(145, 70, 255, 0.2);
+        }
+
+        .activity.watching {
+            border-color: rgba(255, 69, 0, 0.7);
+            background: linear-gradient(45deg, rgba(255, 69, 0, 0.15), rgba(255, 69, 0, 0.25));
+            box-shadow: 0 0 30px rgba(255, 69, 0, 0.2);
+        }
+
+        .activity.listening {
+            border-color: rgba(255, 165, 0, 0.7);
+            background: linear-gradient(45deg, rgba(255, 165, 0, 0.15), rgba(255, 165, 0, 0.25));
+            box-shadow: 0 0 30px rgba(255, 165, 0, 0.2);
+        }
+
+        .activity.offline {
+            border-color: rgba(116, 127, 141, 0.7);
+            background: linear-gradient(45deg, rgba(116, 127, 141, 0.15), rgba(116, 127, 141, 0.25));
+            box-shadow: 0 0 30px rgba(116, 127, 141, 0.2);
+        }
+
+        .activity:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .activity.gaming:hover,
+        .activity.twitch:hover,
+        .activity.youtube:hover,
+        .activity.spotify:hover,
+        .activity.streaming:hover,
+        .activity.watching:hover,
+        .activity.listening:hover,
+        .activity.offline:hover {
+            transform: translateY(-2px);
+        }
+
+        .activity.gaming:hover {
+            box-shadow: 0 0 40px rgba(88, 101, 242, 0.3);
+            border-color: rgba(88, 101, 242, 0.8);
+        }
+
+        .activity.twitch:hover {
+            box-shadow: 0 0 40px rgba(145, 70, 255, 0.3);
+            border-color: rgba(145, 70, 255, 0.8);
+        }
+
+        .activity.youtube:hover {
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.3);
+            border-color: rgba(255, 0, 0, 0.8);
+        }
+
+        .activity.spotify:hover {
+            box-shadow: 0 0 40px rgba(29, 185, 84, 0.3);
+            border-color: rgba(29, 185, 84, 0.8);
+        }
+
+        .activity.streaming:hover {
+            box-shadow: 0 0 40px rgba(145, 70, 255, 0.3);
+            border-color: rgba(145, 70, 255, 0.8);
+        }
+
+        .activity.watching:hover {
+            box-shadow: 0 0 40px rgba(255, 69, 0, 0.3);
+            border-color: rgba(255, 69, 0, 0.8);
+        }
+
+        .activity.listening:hover {
+            box-shadow: 0 0 40px rgba(255, 165, 0, 0.3);
+            border-color: rgba(255, 165, 0, 0.8);
+        }
+
+        .activity.offline:hover {
+            box-shadow: 0 0 40px rgba(116, 127, 141, 0.3);
+            border-color: rgba(116, 127, 141, 0.8);
         }
 
         .activity-icon {
@@ -268,18 +349,6 @@
             color: #fff;
             text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
             margin-top: 0.3rem;
-        }
-
-        .activity.gaming:hover {
-            box-shadow: 0 0 40px rgba(114, 137, 218, 0.25);
-        }
-
-        .activity.spotify:hover {
-            box-shadow: 0 0 40px rgba(29, 185, 84, 0.25);
-        }
-
-        .activity.streaming:hover {
-            box-shadow: 0 0 40px rgba(89, 54, 149, 0.25);
         }
 
         @keyframes fadeIn {
@@ -504,13 +573,6 @@
         .social-link span {
             animation: slideIn 0.5s ease-out;
         }
-
-        #x-profile.active .social-link {
-            opacity: 1;
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-            animation: pulseGlow 2s infinite;
-        }
     </style>
 </head>
 <body>
@@ -566,7 +628,7 @@
 
             <div id="x-profile" class="social-links">
                 <a href="https://x.com/bartek56874551" target="_blank" class="social-link">
-                    <img src="https://abs.twimg.com/responsive-web/client-web/icon-ios.b1fc727a.png" alt="X">
+                    <img src="https://x.com/favicon.ico" alt="X">
                     <span>X</span>
                 </a>
             </div>
@@ -588,28 +650,25 @@
                 const element = document.getElementById(profileId);
                 element.classList.remove('active', 'prev', 'next');
                 
-                // Calculate relative positions considering the circular nature of the carousel
-                const position = (i - index + profiles.length) % profiles.length;
-                
-                if (position === 0) {
+                if (i === index) {
                     element.classList.add('active');
-                } else if (position === profiles.length - 1 || position === -1) {
+                } else if (i === (index - 1 + profiles.length) % profiles.length) {
                     element.classList.add('prev');
-                } else if (position === 1) {
+                } else if (i === (index + 1) % profiles.length) {
                     element.classList.add('next');
                 }
             });
         }
 
         function nextProfile() {
-            currentProfileIndex = (currentProfileIndex + 1) % profiles.length;
+            // Move elements one position left
             const firstProfile = profiles.shift();
             profiles.push(firstProfile);
             updateProfileOrder();
         }
 
         function previousProfile() {
-            currentProfileIndex = (currentProfileIndex - 1 + profiles.length) % profiles.length;
+            // Move elements one position right
             const lastProfile = profiles.pop();
             profiles.unshift(lastProfile);
             updateProfileOrder();
@@ -621,7 +680,7 @@
                 const element = document.getElementById(profileId);
                 container.appendChild(element);
             });
-            showProfile(2); // Always show the center item
+            showProfile(2); // Update to show the center item (index 2)
         }
 
         async function updateProfile() {
@@ -638,7 +697,7 @@
                     }
                     
                     const activityDiv = document.querySelector('.activity');
-                    activityDiv.classList.remove('loading', 'gaming', 'spotify', 'streaming', 'offline');
+                    activityDiv.classList.remove('loading', 'gaming', 'youtube', 'spotify', 'streaming', 'twitch', 'watching', 'listening', 'offline');
                     activityDiv.innerHTML = ''; // Clear previous content
                     
                     if (data.data.spotify) {
@@ -654,7 +713,27 @@
                         `;
                     } else if (data.data.activities && data.data.activities.length > 0) {
                         const activity = data.data.activities[0];
-                        if (activity.type === 0) {
+                        if (activity.name === "Twitch") {
+                            // Watching Twitch
+                            activityDiv.classList.add('twitch');
+                            activityDiv.innerHTML = `
+                                <img src="https://www.twitch.tv/favicon.ico" alt="Twitch" class="activity-icon">
+                                <div class="activity-content">
+                                    <div class="activity-title">Watching Twitch</div>
+                                    ${activity.details ? `<div class="activity-details">${activity.details}</div>` : ''}
+                                </div>
+                            `;
+                        } else if (activity.name === "YouTube") {
+                            // Watching YouTube
+                            activityDiv.classList.add('youtube');
+                            activityDiv.innerHTML = `
+                                <img src="https://www.youtube.com/favicon.ico" alt="YouTube" class="activity-icon">
+                                <div class="activity-content">
+                                    <div class="activity-title">Watching YouTube</div>
+                                    ${activity.details ? `<div class="activity-details">${activity.details}</div>` : ''}
+                                </div>
+                            `;
+                        } else if (activity.type === 0) {
                             // Playing a game
                             activityDiv.classList.add('gaming');
                             let gameIcon = activity.assets?.large_image 
@@ -680,15 +759,19 @@
                             `;
                         } else if (activity.type === 2) {
                             // Listening to something other than Spotify
+                            activityDiv.classList.add('listening');
                             activityDiv.innerHTML = `
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FFA500' d='M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z'/%3E%3C/svg%3E" alt="Music" class="activity-icon">
                                 <div class="activity-content">
                                     <div class="activity-title">Listening to ${activity.name}</div>
                                     ${activity.details ? `<div class="activity-details">${activity.details}</div>` : ''}
                                 </div>
                             `;
                         } else if (activity.type === 3) {
-                            // Watching
+                            // Watching something
+                            activityDiv.classList.add('watching');
                             activityDiv.innerHTML = `
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FF4500' d='M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z'/%3E%3C/svg%3E" alt="Watching" class="activity-icon">
                                 <div class="activity-content">
                                     <div class="activity-title">Watching ${activity.name}</div>
                                     ${activity.details ? `<div class="activity-details">${activity.details}</div>` : ''}
