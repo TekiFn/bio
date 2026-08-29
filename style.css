@@ -872,6 +872,13 @@ body {
     transition: transform var(--transition-bounce), background var(--transition-fast);
 }
 
+.social-icon-box img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    display: block;
+}
+
 .social-info {
     position: relative;
     z-index: 1;
