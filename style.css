@@ -1,26 +1,27 @@
 /* ==========================================================================
    Tekki Bio Page • Master Stylesheet
-   Theme: Crimson Cyber-Glassmorphism
+   Theme: Emerald Neon Cyber-Glassmorphism
    ========================================================================== */
 
 :root {
     /* Color Palette */
-    --bg-base: #060608;
-    --bg-card: rgba(14, 14, 20, 0.65);
-    --bg-card-hover: rgba(22, 22, 32, 0.75);
+    --bg-base: #080a09;
+    --bg-card: rgba(12, 18, 15, 0.68);
+    --bg-card-hover: rgba(18, 28, 22, 0.78);
     --bg-glass-subtle: rgba(255, 255, 255, 0.03);
     
-    --crimson-primary: #ff1a40;
-    --crimson-secondary: #cc0029;
-    --crimson-glow: rgba(255, 26, 64, 0.35);
-    --crimson-glow-strong: rgba(255, 26, 64, 0.6);
+    --green-primary: #10b981;
+    --green-secondary: #059669;
+    --green-accent: #6ee7b7;
+    --green-glow: rgba(16, 185, 129, 0.35);
+    --green-glow-strong: rgba(16, 185, 129, 0.6);
     
     --text-main: #ffffff;
-    --text-muted: #a0a0b8;
-    --text-dim: #686882;
+    --text-muted: #a3b8ad;
+    --text-dim: #64786e;
     
     --border-glass: rgba(255, 255, 255, 0.08);
-    --border-glass-hover: rgba(255, 26, 64, 0.3);
+    --border-glass-hover: rgba(16, 185, 129, 0.3);
     
     /* Status Colors */
     --status-online: #23a55a;
@@ -60,10 +61,10 @@ html {
 
 body {
     font-family: var(--font-body);
-    background-color: #09090b;
+    background-color: #080a09;
     background-image: 
-        radial-gradient(at 50% 0%, rgba(255, 26, 64, 0.08) 0px, transparent 65%),
-        radial-gradient(at 100% 100%, rgba(255, 26, 64, 0.04) 0px, transparent 50%),
+        radial-gradient(at 50% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 65%),
+        radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.04) 0px, transparent 50%),
         radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     background-size: 100% 100%, 100% 100%, 32px 32px;
     background-attachment: fixed;
@@ -93,7 +94,7 @@ body {
     left: 20%;
     width: 600px;
     height: 400px;
-    background: radial-gradient(circle, rgba(255, 26, 64, 0.2) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, transparent 70%);
 }
 
 .glow-2 {
@@ -101,7 +102,7 @@ body {
     right: 20%;
     width: 600px;
     height: 400px;
-    background: radial-gradient(circle, rgba(204, 0, 41, 0.15) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(5, 150, 105, 0.14) 0%, transparent 70%);
 }
 
 .mouse-spotlight {
@@ -112,18 +113,8 @@ body {
     height: 100vh;
     z-index: -2;
     pointer-events: none;
-    background: radial-gradient(600px circle at var(--mouse-x, 50vw) var(--mouse-y, 50vh), rgba(255, 26, 64, 0.06), transparent 50%);
+    background: radial-gradient(600px circle at var(--mouse-x, 50vw) var(--mouse-y, 50vh), rgba(16, 185, 129, 0.06), transparent 50%);
     transition: opacity 0.5s ease;
-}
-
-#particleCanvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    pointer-events: none;
 }
 
 /* ==========================================================================
@@ -146,7 +137,7 @@ body {
     padding: 2.5rem;
     box-shadow: 
         0 20px 50px rgba(0, 0, 0, 0.6),
-        0 0 40px rgba(255, 26, 64, 0.06),
+        0 0 40px rgba(16, 185, 129, 0.06),
         inset 0 1px 1px rgba(255, 255, 255, 0.1);
     position: relative;
     overflow: hidden;
@@ -160,53 +151,8 @@ body {
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--crimson-primary), transparent);
+    background: linear-gradient(90deg, transparent, var(--green-primary), transparent);
     opacity: 0.6;
-}
-
-/* Header (Lanyard status & Clock) */
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    margin-bottom: 2rem;
-}
-
-.status-indicator {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--text-muted);
-}
-
-.pulse-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: var(--status-idle);
-    box-shadow: 0 0 10px var(--status-idle);
-    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.pulse-dot.connected {
-    background-color: var(--status-online);
-    box-shadow: 0 0 10px var(--status-online);
-}
-
-.pulse-dot.error {
-    background-color: var(--status-dnd);
-    box-shadow: 0 0 10px var(--status-dnd);
-}
-
-.local-clock {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--text-dim);
-    letter-spacing: 0.5px;
 }
 
 /* ==========================================================================
@@ -234,14 +180,14 @@ body {
     height: 100%;
     border-radius: 50%;
     padding: 3px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 26, 64, 0.3));
-    box-shadow: 0 0 25px rgba(255, 26, 64, 0.2);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(16, 185, 129, 0.3));
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.2);
     transition: transform var(--transition-bounce), box-shadow var(--transition-smooth);
 }
 
 .avatar-ring:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 35px var(--crimson-glow-strong);
+    box-shadow: 0 0 35px var(--green-glow-strong);
 }
 
 .avatar-img {
@@ -250,7 +196,7 @@ body {
     border-radius: 50%;
     object-fit: cover;
     display: block;
-    background: #121218;
+    background: #121815;
 }
 
 /* Discord Avatar Decoration */
@@ -272,7 +218,7 @@ body {
     width: 22px;
     height: 22px;
     border-radius: 50%;
-    border: 3.5px solid #0e0e14;
+    border: 3.5px solid #0c120f;
     z-index: 3;
     transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
 }
@@ -312,18 +258,18 @@ body {
     font-weight: 800;
     letter-spacing: 3px;
     text-transform: uppercase;
-    background: linear-gradient(90deg, #ff1a40, #ff6b8b, #ff1a40, #b3001e, #ff1a40);
+    background: linear-gradient(90deg, #10b981, #6ee7b7, #10b981, #059669, #10b981);
     background-size: 250% auto;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: textGradientFlow 4s linear infinite;
-    filter: drop-shadow(0 0 14px rgba(255, 26, 64, 0.4));
+    filter: drop-shadow(0 0 14px rgba(16, 185, 129, 0.4));
     transition: filter var(--transition-fast);
 }
 
 .username:hover {
-    filter: drop-shadow(0 0 22px rgba(255, 26, 64, 0.8));
+    filter: drop-shadow(0 0 22px rgba(16, 185, 129, 0.8));
 }
 
 @keyframes textGradientFlow {
@@ -335,12 +281,12 @@ body {
     width: 140px;
     height: 3px;
     border-radius: 4px;
-    background: #ff1a40;
+    background: #10b981;
     box-shadow: 
-        0 0 5px #ff1a40,
-        0 0 15px #ff1a40,
-        0 0 30px #ff1a40,
-        0 0 45px #ff1a40;
+        0 0 5px #10b981,
+        0 0 15px #10b981,
+        0 0 30px #10b981,
+        0 0 45px #10b981;
     margin-top: 4px;
     animation: lightsaberPulse 2.5s ease-in-out infinite;
 }
@@ -348,12 +294,12 @@ body {
 @keyframes lightsaberPulse {
     0%, 100% {
         opacity: 0.6;
-        box-shadow: 0 0 5px #ff1a40, 0 0 15px #ff1a40, 0 0 25px rgba(255, 26, 64, 0.5);
+        box-shadow: 0 0 5px #10b981, 0 0 15px #10b981, 0 0 25px rgba(16, 185, 129, 0.5);
         transform: scaleX(0.9);
     }
     50% {
         opacity: 1;
-        box-shadow: 0 0 8px #ff1a40, 0 0 20px #ff1a40, 0 0 40px #ff1a40, 0 0 60px rgba(255, 26, 64, 0.8);
+        box-shadow: 0 0 8px #10b981, 0 0 20px #10b981, 0 0 40px #10b981, 0 0 60px rgba(16, 185, 129, 0.8);
         transform: scaleX(1.05);
     }
 }
@@ -414,22 +360,22 @@ body {
     align-items: center;
     gap: 0.4rem;
     padding: 0.35rem 0.75rem;
-    background: linear-gradient(135deg, rgba(255, 26, 64, 0.15), rgba(255, 26, 64, 0.05));
-    border: 1px solid rgba(255, 26, 64, 0.3);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+    border: 1px solid rgba(16, 185, 129, 0.3);
     border-radius: 20px;
     font-family: var(--font-mono);
     font-size: 0.8rem;
     font-weight: 600;
-    color: #ff6b8b;
-    box-shadow: 0 0 10px rgba(255, 26, 64, 0.1);
+    color: #6ee7b7;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
 }
 
 .guild-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background-color: var(--crimson-primary);
-    box-shadow: 0 0 6px var(--crimson-primary);
+    background-color: var(--green-primary);
+    box-shadow: 0 0 6px var(--green-primary);
 }
 
 /* Custom Status Pill */
@@ -460,7 +406,7 @@ body {
 
 /* Live Spotify Card */
 .spotify-card {
-    background: linear-gradient(135deg, rgba(29, 185, 84, 0.08) 0%, rgba(14, 14, 20, 0.8) 100%);
+    background: linear-gradient(135deg, rgba(29, 185, 84, 0.08) 0%, rgba(12, 18, 15, 0.8) 100%);
     border: 1px solid rgba(29, 185, 84, 0.3);
     border-radius: 20px;
     padding: 1.4rem;
@@ -618,7 +564,7 @@ body {
 
 /* Rich Game Activity Card */
 .game-card {
-    background: linear-gradient(135deg, rgba(88, 101, 242, 0.1) 0%, rgba(14, 14, 20, 0.8) 100%);
+    background: linear-gradient(135deg, rgba(88, 101, 242, 0.1) 0%, rgba(12, 18, 15, 0.8) 100%);
     border: 1px solid rgba(88, 101, 242, 0.3);
     border-radius: 20px;
     padding: 1.4rem;
@@ -683,7 +629,7 @@ body {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    border: 2px solid #0e0e14;
+    border: 2px solid #0c120f;
 }
 
 .game-details {
@@ -959,11 +905,11 @@ body {
 
 /* Katujemy.eu Brand Hover */
 .katujemy-card:hover {
-    border-color: rgba(255, 26, 64, 0.5);
-    box-shadow: 0 8px 25px rgba(255, 26, 64, 0.25);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.25);
 }
-.katujemy-card .social-icon-box { color: #ff1a40; }
-.katujemy-card .social-glow { background: radial-gradient(circle at center, rgba(255, 26, 64, 0.15), transparent 70%); }
+.katujemy-card .social-icon-box { color: #10b981; }
+.katujemy-card .social-glow { background: radial-gradient(circle at center, rgba(16, 185, 129, 0.15), transparent 70%); }
 
 .social-btn:hover .social-glow {
     opacity: 1;
@@ -1000,10 +946,10 @@ body {
     bottom: 2rem;
     left: 50%;
     transform: translateX(-50%) translateY(100px);
-    background: rgba(18, 18, 26, 0.95);
+    background: rgba(12, 18, 15, 0.95);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 26, 64, 0.4);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 26, 64, 0.3);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(16, 185, 129, 0.3);
     padding: 0.75rem 1.4rem;
     border-radius: 30px;
     display: flex;
@@ -1021,7 +967,7 @@ body {
 }
 
 .toast-icon {
-    color: #ff1a40;
+    color: #10b981;
     display: flex;
     align-items: center;
 }
