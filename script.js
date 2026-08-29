@@ -1,7 +1,7 @@
 /**
  * Tekki Bio Page • Master Script
  * Features: Lanyard WebSocket + REST fallback, Live Spotify progress,
- * Discord presence & decorations, 60fps canvas particles, 3D card tilt & Toast.
+ * Multiple Discord activities switcher & carousel, 3D card tilt & Toast.
  */
 
 const CONFIG = {
@@ -21,14 +21,13 @@ const state = {
     gameTimer: null,
     currentPresence: null,
     spotifyData: null,
-    gameStartTime: null
+    gameStartTime: null,
+    activitiesList: [],
+    currentActivityIndex: 0
 };
 
 // DOM Elements
 const elements = {
-    lanyardDot: document.getElementById('lanyardDot'),
-    lanyardStatus: document.getElementById('lanyardStatus'),
-    localClock: document.getElementById('localClock'),
     currentYear: document.getElementById('currentYear'),
     discordAvatar: document.getElementById('discordAvatar'),
     avatarDecoration: document.getElementById('avatarDecoration'),
@@ -40,6 +39,13 @@ const elements = {
     customStatusEmoji: document.getElementById('customStatusEmoji'),
     customStatusText: document.getElementById('customStatusText'),
     
+    // Multiple Activities Switcher Controls
+    activityHeaderBar: document.getElementById('activityHeaderBar'),
+    activityCountBadge: document.getElementById('activityCountBadge'),
+    activityDots: document.getElementById('activityDots'),
+    prevActivityBtn: document.getElementById('prevActivityBtn'),
+    nextActivityBtn: document.getElementById('nextActivityBtn'),
+
     // Activity Containers
     spotifyCard: document.getElementById('spotifyCard'),
     spotifyAlbumArt: document.getElementById('spotifyAlbumArt'),
@@ -70,25 +76,13 @@ const elements = {
 
     toast: document.getElementById('toast'),
     toastMessage: document.getElementById('toastMessage'),
-    mouseSpotlight: document.getElementById('mouseSpotlight'),
-    canvas: document.getElementById('particleCanvas')
+    mouseSpotlight: document.getElementById('mouseSpotlight')
 };
 
 // ==========================================================================
-// 1. Clock & Year Initialization
+// 1. Year Initialization
 // ==========================================================================
-function initClock() {
-    function updateClock() {
-        const now = new Date();
-        const options = { timeZone: 'Europe/Warsaw', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
-        const timeStr = new Intl.DateTimeFormat('pl-PL', options).format(now);
-        if (elements.localClock) {
-            elements.localClock.textContent = `${timeStr} CET`;
-        }
-    }
-    updateClock();
-    setInterval(updateClock, 1000);
-
+function initYear() {
     if (elements.currentYear) {
         elements.currentYear.textContent = new Date().getFullYear();
     }
@@ -107,7 +101,6 @@ function connectWebSocket() {
             state.ws.close();
         }
 
-        updateConnectionStatus('connecting', 'Łączenie z Lanyard...');
         state.ws = new WebSocket(CONFIG.WS_URL);
 
         state.ws.onopen = () => {
@@ -136,7 +129,6 @@ function connectWebSocket() {
                 // Opcode 0: Dispatch event (INIT_STATE or PRESENCE_UPDATE)
                 if (op === 0) {
                     if (t === 'INIT_STATE' || t === 'PRESENCE_UPDATE') {
-                        updateConnectionStatus('connected', 'Live Discord Presence');
                         handlePresenceData(d);
                     }
                 }
@@ -147,13 +139,12 @@ function connectWebSocket() {
 
         state.ws.onclose = () => {
             stopHeartbeat();
-            updateConnectionStatus('disconnected', 'Tryb awaryjny (REST)');
             scheduleReconnect();
             fetchRestFallback();
         };
 
         state.ws.onerror = (error) => {
-            console.warn('Lanyard WebSocket encountered an error, falling back to REST:', error);
+            console.warn('Lanyard WebSocket error, falling back to REST:', error);
             state.ws.close();
         };
     } catch (e) {
@@ -195,20 +186,6 @@ async function fetchRestFallback() {
     } catch (err) {
         console.error('Error fetching Lanyard REST:', err);
     }
-}
-
-function updateConnectionStatus(type, text) {
-    if (!elements.lanyardDot || !elements.lanyardStatus) return;
-    elements.lanyardDot.className = 'pulse-dot';
-    
-    if (type === 'connected') {
-        elements.lanyardDot.classList.add('connected');
-    } else if (type === 'connecting') {
-        // default idle yellow
-    } else {
-        elements.lanyardDot.classList.add('error');
-    }
-    elements.lanyardStatus.textContent = text;
 }
 
 // ==========================================================================
@@ -288,15 +265,90 @@ function handlePresenceData(data) {
         elements.customStatusPill.classList.add('hidden');
     }
 
-    // 4. Activity Display Routing
+    // 4. Multiple Activities Routing
     renderActivities(spotify, activities, discord_status);
 }
 
 // ==========================================================================
-// 4. Render Activities (Spotify / Games / Idle)
+// 4. Multiple Activities Handling (Carousel & Switcher)
 // ==========================================================================
+function collectActivities(spotify, activities) {
+    const list = [];
+    
+    // 1. Spotify
+    if (spotify) {
+        list.push({
+            kind: 'spotify',
+            data: spotify
+        });
+    }
+
+    // 2. Discord Activities (exclude custom status type 4, and exclude duplicate Spotify activity if spotify object exists)
+    if (activities && activities.length > 0) {
+        activities.forEach(act => {
+            if (act.type === 4) return; // Custom status (type 4) is shown in pill
+            if (spotify && act.name === 'Spotify') return; // Already handled by rich spotify player
+            list.push({
+                kind: 'discord_activity',
+                data: act
+            });
+        });
+    }
+
+    return list;
+}
+
 function renderActivities(spotify, activities, discord_status) {
-    // Reset all cards
+    state.activitiesList = collectActivities(spotify, activities);
+
+    // Keep index within bounds
+    if (state.currentActivityIndex >= state.activitiesList.length) {
+        state.currentActivityIndex = 0;
+    }
+
+    // Update Pagination Header (if more than 1 activity)
+    if (state.activitiesList.length > 1) {
+        if (elements.activityHeaderBar) {
+            elements.activityHeaderBar.classList.remove('hidden');
+        }
+        if (elements.activityCountBadge) {
+            elements.activityCountBadge.textContent = `AKTYWNOŚĆ ${state.currentActivityIndex + 1} Z ${state.activitiesList.length}`;
+        }
+        if (elements.activityDots) {
+            elements.activityDots.innerHTML = '';
+            for (let i = 0; i < state.activitiesList.length; i++) {
+                const dot = document.createElement('span');
+                dot.className = `activity-dot ${i === state.currentActivityIndex ? 'active' : ''}`;
+                dot.onclick = () => goToActivity(i);
+                dot.title = `Przejdź do aktywności ${i + 1}`;
+                elements.activityDots.appendChild(dot);
+            }
+        }
+    } else {
+        if (elements.activityHeaderBar) {
+            elements.activityHeaderBar.classList.add('hidden');
+        }
+    }
+
+    // If no activities, show Idle/Offline card
+    if (state.activitiesList.length === 0) {
+        hideAllActivityCards();
+        elements.idleCard.classList.remove('hidden');
+        if (discord_status === 'offline') {
+            elements.idleTitle.textContent = 'Status: Offline';
+            elements.idleSubtitle.textContent = 'Obecnie niedostępny';
+        } else {
+            elements.idleTitle.textContent = 'Brak aktywnej sesji';
+            elements.idleSubtitle.textContent = 'Przeglądanie / Chill';
+        }
+        return;
+    }
+
+    // Render the currently selected activity item
+    renderCurrentActivity();
+}
+
+function hideAllActivityCards() {
     elements.spotifyCard.classList.add('hidden');
     elements.gameCard.classList.add('hidden');
     elements.genericActivityCard.classList.add('hidden');
@@ -310,98 +362,122 @@ function renderActivities(spotify, activities, discord_status) {
         clearInterval(state.gameTimer);
         state.gameTimer = null;
     }
+}
 
-    // Case 1: Spotify is playing
-    if (spotify) {
-        state.spotifyData = spotify;
-        elements.spotifyCard.classList.remove('hidden');
-        
-        elements.spotifyAlbumArt.src = spotify.album_art_url || '';
-        elements.spotifyTrackLink.textContent = spotify.song || 'Nieznany utwór';
-        elements.spotifyTrackLink.href = spotify.track_id ? `https://open.spotify.com/track/${spotify.track_id}` : '#';
-        elements.spotifyArtist.textContent = spotify.artist || 'Nieznany wykonawca';
-        elements.spotifyAlbum.textContent = spotify.album || '';
+function renderCurrentActivity() {
+    hideAllActivityCards();
+    const item = state.activitiesList[state.currentActivityIndex];
+    if (!item) return;
 
-        // Live progress tracking
-        updateSpotifyProgress();
-        state.spotifyTimer = setInterval(updateSpotifyProgress, 300);
-        return;
+    if (elements.activityCountBadge) {
+        elements.activityCountBadge.textContent = `AKTYWNOŚĆ ${state.currentActivityIndex + 1} Z ${state.activitiesList.length}`;
     }
 
-    // Case 2: Gaming / Rich Presence
-    const gameActivity = activities ? activities.find(a => a.type === 0) : null;
-    if (gameActivity) {
-        elements.gameCard.classList.remove('hidden');
-        elements.gameTypeLabel.textContent = 'GRA W GRĘ';
-        elements.gameName.textContent = gameActivity.name || 'Gra';
-        elements.gameDetails.textContent = gameActivity.details || '';
-        elements.gameState.textContent = gameActivity.state || '';
-
-        // Large & Small Assets
-        if (gameActivity.assets && gameActivity.assets.large_image) {
-            let largeUrl = gameActivity.assets.large_image;
-            if (largeUrl.startsWith('mp:external/')) {
-                largeUrl = `https://media.discordapp.net/${largeUrl.replace('mp:', '')}`;
-            } else if (!largeUrl.startsWith('http')) {
-                largeUrl = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${largeUrl}.png`;
+    // Update dots active class
+    if (elements.activityDots) {
+        const dots = elements.activityDots.querySelectorAll('.activity-dot');
+        dots.forEach((dot, idx) => {
+            if (idx === state.currentActivityIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
             }
-            elements.gameLargeImage.src = largeUrl;
-            elements.gameLargeImage.classList.remove('hidden');
-        } else {
-            elements.gameLargeImage.src = 'https://discord.com/assets/game-controller.svg';
-        }
-
-        if (gameActivity.assets && gameActivity.assets.small_image) {
-            let smallUrl = gameActivity.assets.small_image;
-            if (smallUrl.startsWith('mp:external/')) {
-                smallUrl = `https://media.discordapp.net/${smallUrl.replace('mp:', '')}`;
-            } else if (!smallUrl.startsWith('http')) {
-                smallUrl = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${smallUrl}.png`;
-            }
-            elements.gameSmallImage.src = smallUrl;
-            elements.gameSmallImage.classList.remove('hidden');
-        } else {
-            elements.gameSmallImage.classList.add('hidden');
-        }
-
-        // Elapsed Timer
-        const startTime = gameActivity.timestamps?.start || gameActivity.created_at || Date.now();
-        state.gameStartTime = startTime;
-        updateGameTimer();
-        state.gameTimer = setInterval(updateGameTimer, 1000);
-        return;
+        });
     }
 
-    // Case 3: Other activities (Streaming, YouTube, Twitch, PreMiD, etc.)
-    const otherActivity = activities ? activities.find(a => a.type !== 4) : null;
-    if (otherActivity) {
-        elements.genericActivityCard.classList.remove('hidden');
-        elements.genericActivityTitle.textContent = otherActivity.name;
-        elements.genericActivityDesc.textContent = otherActivity.details || otherActivity.state || 'Aktywny';
-        
-        let iconUrl = 'https://discord.com/assets/game-controller.svg';
-        if (otherActivity.assets?.large_image) {
-            let img = otherActivity.assets.large_image;
-            if (img.startsWith('mp:external/')) {
-                iconUrl = `https://media.discordapp.net/${img.replace('mp:', '')}`;
-            } else if (!img.startsWith('http')) {
-                iconUrl = `https://cdn.discordapp.com/app-assets/${otherActivity.application_id}/${img}.png`;
-            }
-        }
-        elements.genericActivityIcon.src = iconUrl;
-        return;
-    }
-
-    // Case 4: Idle / Offline
-    elements.idleCard.classList.remove('hidden');
-    if (discord_status === 'offline') {
-        elements.idleTitle.textContent = 'Status: Offline';
-        elements.idleSubtitle.textContent = 'Obecnie niedostępny';
-    } else {
-        elements.idleTitle.textContent = 'Brak aktywnej sesji';
-        elements.idleSubtitle.textContent = 'Przeglądanie / Chill';
+    if (item.kind === 'spotify') {
+        renderSpotifyCard(item.data);
+    } else if (item.kind === 'discord_activity') {
+        renderDiscordActivityCard(item.data);
     }
 }
+
+function renderSpotifyCard(spotify) {
+    state.spotifyData = spotify;
+    elements.spotifyCard.classList.remove('hidden');
+    
+    elements.spotifyAlbumArt.src = spotify.album_art_url || '';
+    elements.spotifyTrackLink.textContent = spotify.song || 'Nieznany utwór';
+    elements.spotifyTrackLink.href = spotify.track_id ? `https://open.spotify.com/track/${spotify.track_id}` : '#';
+    elements.spotifyArtist.textContent = spotify.artist || 'Nieznany wykonawca';
+    elements.spotifyAlbum.textContent = spotify.album || '';
+
+    updateSpotifyProgress();
+    state.spotifyTimer = setInterval(updateSpotifyProgress, 300);
+}
+
+function renderDiscordActivityCard(act) {
+    elements.gameCard.classList.remove('hidden');
+
+    // Format type label
+    let typeLabel = 'GRA W GRĘ';
+    if (act.type === 1) typeLabel = 'STREAMUJE';
+    else if (act.type === 2) typeLabel = 'SŁUCHA';
+    else if (act.type === 3) typeLabel = 'OGLĄDA';
+    else if (act.type === 5) typeLabel = 'RYWALIZUJE';
+    else if (act.name && act.name.toLowerCase().includes('premid')) typeLabel = 'AKTYWNOŚĆ';
+    
+    elements.gameTypeLabel.textContent = typeLabel;
+    elements.gameName.textContent = act.name || 'Aktywność';
+    elements.gameDetails.textContent = act.details || '';
+    elements.gameState.textContent = act.state || '';
+
+    // Large & Small Assets
+    if (act.assets && act.assets.large_image) {
+        let largeUrl = act.assets.large_image;
+        if (largeUrl.startsWith('mp:external/')) {
+            largeUrl = `https://media.discordapp.net/${largeUrl.replace('mp:', '')}`;
+        } else if (!largeUrl.startsWith('http')) {
+            largeUrl = `https://cdn.discordapp.com/app-assets/${act.application_id}/${largeUrl}.png`;
+        }
+        elements.gameLargeImage.src = largeUrl;
+        elements.gameLargeImage.classList.remove('hidden');
+    } else {
+        elements.gameLargeImage.src = 'https://discord.com/assets/game-controller.svg';
+    }
+
+    if (act.assets && act.assets.small_image) {
+        let smallUrl = act.assets.small_image;
+        if (smallUrl.startsWith('mp:external/')) {
+            smallUrl = `https://media.discordapp.net/${smallUrl.replace('mp:', '')}`;
+        } else if (!smallUrl.startsWith('http')) {
+            smallUrl = `https://cdn.discordapp.com/app-assets/${act.application_id}/${smallUrl}.png`;
+        }
+        elements.gameSmallImage.src = smallUrl;
+        elements.gameSmallImage.classList.remove('hidden');
+    } else {
+        elements.gameSmallImage.classList.add('hidden');
+    }
+
+    // Elapsed Timer
+    const startTime = act.timestamps?.start || act.created_at || Date.now();
+    state.gameStartTime = startTime;
+    updateGameTimer();
+    state.gameTimer = setInterval(updateGameTimer, 1000);
+}
+
+function nextActivity() {
+    if (state.activitiesList.length <= 1) return;
+    state.currentActivityIndex = (state.currentActivityIndex + 1) % state.activitiesList.length;
+    renderCurrentActivity();
+}
+
+function prevActivity() {
+    if (state.activitiesList.length <= 1) return;
+    state.currentActivityIndex = (state.currentActivityIndex - 1 + state.activitiesList.length) % state.activitiesList.length;
+    renderCurrentActivity();
+}
+
+function goToActivity(index) {
+    if (index < 0 || index >= state.activitiesList.length) return;
+    state.currentActivityIndex = index;
+    renderCurrentActivity();
+}
+
+// Make navigation functions globally accessible for onclick attributes
+window.nextActivity = nextActivity;
+window.prevActivity = prevActivity;
+window.goToActivity = goToActivity;
 
 // ==========================================================================
 // 5. Spotify Progress & Game Timers
@@ -465,6 +541,7 @@ function copyDiscordTag() {
         showToast(`Tag Discord: ${tag}`);
     });
 }
+window.copyDiscordTag = copyDiscordTag;
 
 function showToast(message) {
     if (!elements.toast) return;
@@ -509,7 +586,7 @@ function initTiltEffect() {
 // 7. Bootloader
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
-    initClock();
+    initYear();
     initTiltEffect();
     initLanyard();
 });

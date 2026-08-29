@@ -83,6 +83,24 @@
             <!-- Dynamic Activity / Music / Gaming Section -->
             <section class="activity-section" id="activitySection">
                 
+                <!-- Activity Switcher Controls (Widoczne, gdy aktywności > 1) -->
+                <div class="activity-header-bar hidden" id="activityHeaderBar">
+                    <div class="activity-count-badge" id="activityCountBadge">AKTYWNOŚĆ 1 Z 2</div>
+                    <div class="activity-nav-controls">
+                        <button class="activity-arrow-btn" id="prevActivityBtn" onclick="prevActivity()" title="Poprzednia aktywność">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M15 18l-6-6 6-6"/>
+                            </svg>
+                        </button>
+                        <div class="activity-dots" id="activityDots"></div>
+                        <button class="activity-arrow-btn" id="nextActivityBtn" onclick="nextActivity()" title="Następna aktywność">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Live Spotify Player Card -->
                 <div class="spotify-card hidden" id="spotifyCard">
                     <div class="spotify-header">
