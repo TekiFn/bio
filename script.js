@@ -199,9 +199,14 @@ function handlePresenceData(data) {
     if (discord_user) {
         const { id, avatar, avatar_decoration_data, global_name, username, primary_guild } = discord_user;
 
-        // Display Name & Username
+        // Display Name & Username & Nitro Display Name Styles
         if (elements.displayName) {
             elements.displayName.textContent = global_name || username || 'Tekki';
+            if (discord_user.display_name_styles && discord_user.display_name_styles.colors && discord_user.display_name_styles.colors.length > 0) {
+                const c1 = '#' + discord_user.display_name_styles.colors[0].toString(16).padStart(6, '0');
+                const c2 = '#' + (discord_user.display_name_styles.colors[1] || discord_user.display_name_styles.colors[0]).toString(16).padStart(6, '0');
+                elements.displayName.style.backgroundImage = `linear-gradient(90deg, ${c1}, ${c2}, ${c1})`;
+            }
         }
         if (elements.discordUsernameText) {
             elements.discordUsernameText.textContent = `@${username || 'tekki2137'}`;

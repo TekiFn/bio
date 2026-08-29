@@ -253,40 +253,41 @@ body {
 }
 
 .username {
-    font-family: var(--font-heading);
-    font-size: 2.8rem;
-    font-weight: 800;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    background: linear-gradient(90deg, #10b981, #6ee7b7, #10b981, #059669, #10b981);
-    background-size: 250% auto;
+    font-family: 'Kalam', 'Caveat', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 3.4rem;
+    font-weight: 700;
+    font-style: italic;
+    letter-spacing: 0.5px;
+    text-transform: none;
+    background: linear-gradient(90deg, #93e2de, #b9a8ce, #93e2de);
+    background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: textGradientFlow 4s linear infinite;
-    filter: drop-shadow(0 0 14px rgba(16, 185, 129, 0.4));
+    filter: drop-shadow(0 0 12px rgba(147, 226, 222, 0.45));
     transition: filter var(--transition-fast);
 }
 
 .username:hover {
-    filter: drop-shadow(0 0 22px rgba(16, 185, 129, 0.8));
+    filter: drop-shadow(0 0 20px rgba(185, 168, 206, 0.8));
 }
 
 @keyframes textGradientFlow {
     0% { background-position: 0% center; }
-    100% { background-position: -250% center; }
+    100% { background-position: -200% center; }
 }
 
 .lightsaber-beam {
-    width: 140px;
+    width: 130px;
     height: 3px;
     border-radius: 4px;
-    background: #10b981;
+    background: linear-gradient(90deg, #93e2de, #b9a8ce);
     box-shadow: 
-        0 0 5px #10b981,
-        0 0 15px #10b981,
-        0 0 30px #10b981,
-        0 0 45px #10b981;
+        0 0 5px #93e2de,
+        0 0 15px #93e2de,
+        0 0 30px #b9a8ce,
+        0 0 45px #b9a8ce;
     margin-top: 4px;
     animation: lightsaberPulse 2.5s ease-in-out infinite;
 }
@@ -294,12 +295,12 @@ body {
 @keyframes lightsaberPulse {
     0%, 100% {
         opacity: 0.6;
-        box-shadow: 0 0 5px #10b981, 0 0 15px #10b981, 0 0 25px rgba(16, 185, 129, 0.5);
+        box-shadow: 0 0 5px #93e2de, 0 0 15px #93e2de, 0 0 25px rgba(185, 168, 206, 0.5);
         transform: scaleX(0.9);
     }
     50% {
         opacity: 1;
-        box-shadow: 0 0 8px #10b981, 0 0 20px #10b981, 0 0 40px #10b981, 0 0 60px rgba(16, 185, 129, 0.8);
+        box-shadow: 0 0 8px #93e2de, 0 0 20px #93e2de, 0 0 40px #b9a8ce, 0 0 60px rgba(185, 168, 206, 0.8);
         transform: scaleX(1.05);
     }
 }
