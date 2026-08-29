@@ -250,6 +250,7 @@ body {
     flex-direction: column;
     align-items: center;
     margin-bottom: 0.6rem;
+    overflow: visible;
 }
 
 .username {
@@ -259,6 +260,9 @@ body {
     font-style: italic;
     letter-spacing: 0.5px;
     text-transform: none;
+    padding: 0.1rem 0.8rem 0.1rem 0.3rem;
+    line-height: 1.2;
+    overflow: visible;
     background: linear-gradient(90deg, #10b981, #6ee7b7, #10b981, #059669, #10b981);
     background-size: 250% auto;
     -webkit-background-clip: text;
