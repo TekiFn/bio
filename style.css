@@ -358,7 +358,7 @@ body {
 .guild-badge {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.45rem;
     padding: 0.35rem 0.75rem;
     background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
     border: 1px solid rgba(16, 185, 129, 0.3);
@@ -370,12 +370,12 @@ body {
     box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
 }
 
-.guild-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: var(--green-primary);
-    box-shadow: 0 0 6px var(--green-primary);
+.guild-badge-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 0 4px rgba(255, 60, 40, 0.5));
 }
 
 /* Custom Status Pill */

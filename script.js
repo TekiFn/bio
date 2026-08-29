@@ -207,14 +207,17 @@ function handlePresenceData(data) {
             elements.discordUsernameText.textContent = `@${username || 'tekki2137'}`;
         }
 
-        // Guild Tag
+        // Guild Tag & Clan Fire Badge from Discord API
         if (elements.guildTagBadge) {
             if (primary_guild && primary_guild.tag) {
-                elements.guildTagBadge.innerHTML = `<span class="guild-dot"></span> ${primary_guild.tag}`;
+                let badgeImg = '';
+                if (primary_guild.badge && primary_guild.identity_guild_id) {
+                    badgeImg = `<img src="https://cdn.discordapp.com/clan-badges/${primary_guild.identity_guild_id}/${primary_guild.badge}.png" alt="Clan Badge" class="guild-badge-icon">`;
+                }
+                elements.guildTagBadge.innerHTML = `${badgeImg} <span>${primary_guild.tag}</span>`;
                 elements.guildTagBadge.classList.remove('hidden');
             } else {
-                elements.guildTagBadge.innerHTML = `<span class="guild-dot"></span> SFF1`;
-                elements.guildTagBadge.classList.remove('hidden');
+                elements.guildTagBadge.classList.add('hidden');
             }
         }
 
