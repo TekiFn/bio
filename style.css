@@ -855,15 +855,19 @@ body {
 .social-icon-box {
     position: relative;
     z-index: 1;
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.05);
+    width: 32px;
+    height: 32px;
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: transform var(--transition-bounce), background var(--transition-fast);
+    transition: transform var(--transition-bounce);
+}
+
+.social-icon-box .brand-svg {
+    width: 24px;
+    height: 24px;
 }
 
 .social-icon-box img {
