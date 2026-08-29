@@ -341,20 +341,6 @@ body {
     opacity: 0.8;
 }
 
-.copy-hint {
-    font-size: 0.68rem;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 0.1rem 0.35rem;
-    border-radius: 6px;
-    opacity: 0.6;
-    transition: opacity var(--transition-fast);
-}
-
-.discord-tag:hover .copy-hint {
-    opacity: 1;
-    background: rgba(88, 101, 242, 0.4);
-}
-
 .guild-badge {
     display: inline-flex;
     align-items: center;
